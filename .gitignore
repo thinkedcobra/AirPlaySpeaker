@@ -1,0 +1,16 @@
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Build artifacts (if building inside the repo, though script builds in /tmp)
+shairport-sync/
+*.o
+*.so
+
+# Editor
+.vscode/
+.idea/
