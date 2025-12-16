@@ -46,7 +46,11 @@ apt-get install -y --no-install-recommends \
     libavformat-dev \
     uuid-dev \
     libgcrypt-dev \
-    xxd
+    xxd \
+    libglib2.0-dev \
+    python3-dbus \
+    python3-gi \
+    python3-waitress
 
 # Clone Shairport Sync
 cd /tmp
@@ -69,6 +73,7 @@ autoreconf -fi
     --with-ssl=openssl \
     --with-soxr \
     --with-metadata \
+    --with-dbus-interface \
     --with-systemd
 
 echo -e "${YELLOW}Compiling... (this may take a few minutes)${NC}"
@@ -79,6 +84,17 @@ make install
 
 # Enable Service
 echo -e "${YELLOW}Enabling shairport-sync service...${NC}"
+
+# Install Config
+if [ -f "shairport-sync.conf" ]; then
+    echo -e "${YELLOW}Installing default configuration to /etc/shairport-sync.conf...${NC}"
+    # Backup existing config if it exists
+    if [ -f "/etc/shairport-sync.conf" ]; then
+        mv /etc/shairport-sync.conf /etc/shairport-sync.conf.bak
+    fi
+    cp shairport-sync.conf /etc/shairport-sync.conf
+fi
+
 systemctl enable shairport-sync
 systemctl start shairport-sync
 
